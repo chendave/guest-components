@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
+#![allow(unused_imports)]
 use super::Attester;
 use anyhow::*;
 use base64::Engine;
@@ -11,6 +12,9 @@ use nix::sys::stat::Mode;
 use nix::unistd::close;
 use serde::{Deserialize, Serialize};
 use std::path::Path;
+use std::fs::File;
+use std::io::prelude::*;
+
 
 const CCA_DEVICE_PATH: &str = "/dev/cca_attestation";
 
@@ -52,8 +56,17 @@ impl Attester for CCAAttester {
 fn attestation(challenge: Vec<u8>) -> Result<Vec<u8>, Error> {
     log::info!("cca_test::attestation started");
 
-    let challenge = challenge.as_slice().try_into()?;
+    //let challenge = challenge.as_slice().try_into()?;
+    println!("{:?}", challenge.as_slice());
 
+    let mut f = File::open("/home/dave/cca/cbor-token.cbor")?; //  pass
+    //let mut f = File::open("/home/dave/cca/token_myself.cbor")?; // cannot pass
+    let mut buffer = Vec::new();
+    // read the whole file
+    f.read_to_end(&mut buffer)?;
+    Ok(buffer)
+
+    /*
     match open(CCA_DEVICE_PATH, OFlag::empty(), Mode::empty()) {
         Result::Ok(f) => {
             log::info!("cca_test::attestation opening attestation succeeded");
@@ -90,6 +103,7 @@ fn attestation(challenge: Vec<u8>) -> Result<Vec<u8>, Error> {
             bail!(err)
         }
     }
+    */
 }
 
 #[cfg(test)]

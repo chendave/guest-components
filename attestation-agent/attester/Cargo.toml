@@ -31,7 +31,7 @@ tokio.workspace = true
 
 [features]
 default = ["all-attesters"]
-all-attesters = ["tdx-attester", "sgx-attester", "az-snp-vtpm-attester", "snp-attester", "csv-attester", "cca-attester"]
+all-attesters = ["tdx-attester", "cca-attester"]
 
 tdx-attester = ["tdx-attest-rs"]
 sgx-attester = ["occlum_dcap"]
